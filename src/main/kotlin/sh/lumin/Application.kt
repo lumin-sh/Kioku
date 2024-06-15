@@ -53,7 +53,6 @@ fun Application.module() {
     }
     //
     install(ContentNegotiation) {
-        json()
         gson()
     }
     //
