@@ -20,17 +20,22 @@ import com.mongodb.kotlin.client.coroutine.MongoCollection
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import sh.lumin.apiKeys
 import sh.lumin.kioku.db.LogEntry
 import sh.lumin.kioku.db.MongoDB
 import sh.lumin.kioku.db.StatsResult
+import sh.lumin.kioku.utils.APIUtils
 import sh.lumin.kioku.utils.Utils
 
 suspend fun handleAllStats(call: ApplicationCall, collectionCache: MutableMap<String, MongoCollection<LogEntry>>) {
-    call.request.headers["X-API-Key"] ?: return call.respond(HttpStatusCode.Unauthorized, mapOf("error" to "No API key provided!"))
+    val key = call.request.headers["X-API-Key"] ?: return call.respond(HttpStatusCode.Unauthorized, mapOf("error" to "No API key provided!"))
     //
-    val allStats = MongoDB.database.listCollectionNames().map { topic ->
+    val allStats = MongoDB.database.listCollectionNames().filter { topic ->
+        APIUtils.validateApiKey(key, topic, apiKeys) // Filter out topics where API key is invalid or doesn't have permission for
+    }.map { topic ->
         val collection = Utils.getCollectionForTopic(topic, collectionCache)
         val totalCount = collection.countDocuments()
         topic to StatsResult(totalCount)

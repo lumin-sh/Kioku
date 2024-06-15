@@ -16,7 +16,6 @@
 
 package sh.lumin.kioku.api
 
-import com.google.gson.Gson
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import io.ktor.http.*
 import io.ktor.server.application.*

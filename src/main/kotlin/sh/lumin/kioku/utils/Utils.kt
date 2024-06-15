@@ -19,8 +19,11 @@ package sh.lumin.kioku.utils
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import sh.lumin.kioku.db.LogEntry
 import sh.lumin.kioku.db.MongoDB
-import java.io.*
-import java.util.Properties
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.*
 
 object Utils {
     fun getCollectionForTopic(topic: String, collectionCache: MutableMap<String, MongoCollection<LogEntry>>): MongoCollection<LogEntry> {

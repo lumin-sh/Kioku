@@ -19,13 +19,11 @@ package sh.lumin.kioku.api
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import sh.lumin.apiKeys
 import sh.lumin.kioku.db.LogEntry
-import sh.lumin.kioku.utils.APIUtils
-import sh.lumin.properties
 
 
 fun Application.configureRouting() {
-    val apiKeys = APIUtils.loadApiKeys(properties.getProperty("api_keys", "keys.txt"))
     val collectionCache = mutableMapOf<String, MongoCollection<LogEntry>>()
 
     routing {

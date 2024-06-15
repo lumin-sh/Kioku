@@ -72,7 +72,6 @@ class LogEntryCodec : Codec<LogEntry> {
                 }
                 else -> {
                     reader.skipValue()
-                    null
                 }
             }
         }

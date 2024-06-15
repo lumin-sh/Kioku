@@ -18,7 +18,6 @@ package sh.lumin
 
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
-import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -26,9 +25,11 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import sh.lumin.kioku.api.configureRouting
 import sh.lumin.kioku.db.MongoDB
+import sh.lumin.kioku.utils.APIUtils
 import sh.lumin.kioku.utils.Utils
 
 val properties = Utils.loadConfig()
+val apiKeys = APIUtils.loadApiKeys(properties.getProperty("api_keys", "keys.txt"))
 
 fun main() {
     embeddedServer(
