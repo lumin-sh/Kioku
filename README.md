@@ -17,7 +17,7 @@ A telemetry API written in pure Kotlin.
 The first startup of Kioku will generate a `config.properties`.
 Adjust the `ktor_host`, `port`, `mongo_uri` and `api_keys` as needed.
 
-Each line in the file given to api_keys will be a valid API Key, Excluding lines starting with `#`
+Each line in the file given to api_keys will be a valid API Key (key:topic_1m,topic_2) , Excluding lines starting with `#`
 
 ## Contributing
 

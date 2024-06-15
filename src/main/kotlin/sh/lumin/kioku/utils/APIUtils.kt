@@ -40,7 +40,7 @@ object APIUtils {
     }
 
     fun validateApiKey(apiKey: String, topic: String, apiKeys: Map<String, ApiKey>): Boolean {
-        if(properties.getProperty("use_api_keys", "true").toBoolean()) return true
+        if(!properties.getProperty("use_api_keys", "true").toBoolean()) return true
         val apiKeyData = apiKeys[apiKey]
         return apiKeyData != null && apiKeyData.allowedTopics.contains(topic)
     }

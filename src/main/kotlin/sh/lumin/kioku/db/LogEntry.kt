@@ -16,6 +16,4 @@
 
 package sh.lumin.kioku.db
 
-import java.time.LocalDateTime
-
-data class LogEntry(val timestamp: LocalDateTime = LocalDateTime.now(), val topic: String, val data: Any)
+data class LogEntry(var timestamp: Long = System.currentTimeMillis(), val topic: String, val data: Any)

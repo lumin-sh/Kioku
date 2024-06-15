@@ -16,8 +16,12 @@
 
 package sh.lumin.kioku.db
 
+import com.mongodb.ConnectionString
+import com.mongodb.MongoClientSettings
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
+import org.bson.codecs.configuration.CodecRegistries
+import sh.lumin.kioku.utils.LogEntryCodec
 
 
 class MongoDB(URI: String) {
@@ -29,7 +33,17 @@ class MongoDB(URI: String) {
     }
 
     init {
-        client = MongoClient.create(URI)
+        val codecReg = CodecRegistries.fromRegistries(
+            CodecRegistries.fromCodecs(LogEntryCodec()),
+            MongoClientSettings.getDefaultCodecRegistry()
+        )
+        //
+        val settings = MongoClientSettings.builder()
+            .codecRegistry(codecReg)
+            .applyConnectionString(ConnectionString(URI))
+            .build()
+        //
+        client = MongoClient.create(settings)
         database = client.getDatabase("kioku")
         isReady = true
     }

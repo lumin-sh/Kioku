@@ -16,6 +16,7 @@
 
 package sh.lumin.kioku.api
 
+import com.google.gson.Gson
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -28,12 +29,16 @@ import sh.lumin.kioku.utils.Utils
 suspend fun handleLogEntry(call: ApplicationCall, apiKeys: Map<String, APIUtils.ApiKey>, collectionCache: MutableMap<String, MongoCollection<LogEntry>>) {
     val apiKey = call.request.headers["X-API-Key"] ?: return call.respond(HttpStatusCode.Unauthorized, mapOf("error" to "No API key provided!"))
     val logEntry = call.receive<LogEntry>()
+    logEntry.timestamp = System.currentTimeMillis()
 
     if (!APIUtils.validateApiKey(apiKey, logEntry.topic, apiKeys)) {
         return call.respond(HttpStatusCode.Forbidden, mapOf("error" to "You do not have permission to view this topic!"))
     }
 
     val collection = Utils.getCollectionForTopic(logEntry.topic, collectionCache)
+    //
+    println("\n" + logEntry.data + "\n")
+    println(logEntry.data::class.simpleName)
     collection.insertOne(logEntry)
     call.respond(HttpStatusCode.Created)
 }
